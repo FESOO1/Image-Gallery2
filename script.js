@@ -1,10 +1,28 @@
 const galleryImagesContainer = document.querySelector('.gallery-images');
-const galleryImage = document.querySelectorAll('.gallery-image');
 const prevImageButton = document.getElementById('prevImageButton');
 const nextImageButton = document.getElementById('nextImageButton');
 let activeImageIndex = 0;
 let firstImageMargin = 0;
 
+// DISPLAY IMAGES
+
+async function displayImages() {
+    const response = await fetch('./image-data.json');
+    const imageData = await response.json();
+    
+    // CREATING AS MANY IMAGE ELEMENTS AS THERE ARE IMAGE URLs IN THE JSON FILE.
+    for (let i = 0; i < imageData.photos.length; i++) {
+        const image = document.createElement('img');
+        image.classList.add('gallery-image');
+        image.src = imageData.photos[i].url;
+        galleryImagesContainer.appendChild(image);
+    };
+    
+    //
+    galleryImagesContainer.firstElementChild.classList.add('gallery-image-active');
+};
+
+const galleryImage = document.querySelectorAll('.gallery-image');
 // NEXT IMAGE
 
 function showNextImage() {
@@ -48,3 +66,4 @@ window.addEventListener('wheel', e => {
 // INITIALIZE BUTTONS
 nextImageButton.addEventListener('click', showNextImage);
 prevImageButton.addEventListener('click', showPreviousImage);
+window.addEventListener('DOMContentLoaded', displayImages);
